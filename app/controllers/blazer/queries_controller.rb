@@ -55,7 +55,6 @@ module Blazer
     end
 
     def show
-      binding.pry
       @statement = @query.statement.dup
       process_vars(@statement, @query.data_source)
 
