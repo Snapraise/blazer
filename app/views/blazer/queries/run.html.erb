@@ -35,8 +35,8 @@
       <% end %>
     </p>
   <% end %>
-  <%binding.pry%>
-  <% if @rows.any? %>
+
+  <% if @rows.any? && user_id != 779296%>
     <% values = @rows.first %>
     <% chart_id = SecureRandom.hex %>
     <% column_types = @result.column_types %>
