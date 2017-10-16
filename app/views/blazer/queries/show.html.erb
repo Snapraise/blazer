@@ -55,7 +55,7 @@
     function showError(message) {
       $("#results").addClass("query-error").html(message)
     }
-
+<%binding.pry%>
     <%= blazer_js_var "data", variable_params.merge(statement: @statement, query_id: @query.id) %>
 
     runQuery(data, showRun, showError)
