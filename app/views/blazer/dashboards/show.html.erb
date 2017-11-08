@@ -25,14 +25,30 @@
   </p>
 <% end %>
 
-<%= render partial: "blazer/variables", locals: {action: dashboard_path(@dashboard)} %>
-
 <% @queries.each_with_index do |query, i| %>
   <div class="chart-container">
-    <h4><%= link_to query.friendly_name, query_path(query, variable_params), target: "_blank" %></h4>
-    <div id="chart-<%= i %>" class="chart">
-      <p class="text-muted">Loading...</p>
-    </div>
+    <h3><%= link_to query.friendly_name, query_path(query, variable_params), target: "_blank" %></h3>
+    <center>
+      <%= query.description %>
+      <br>
+      <br>
+    </center>
+    <% if query.variables.empty? %>
+      <br>
+      <div align="right">
+        <%= button_to "Download", run_queries_path(query_id: query.id, format: "csv"), params: {statement: query.statement}, class: "btn btn-primary" %>
+      </div>
+      <br>
+      <div id="chart-<%= i %>" class="chart">
+        <p class="text-muted">Loading...</p>
+      </div>
+    <%else%>
+      <center>
+        <%= link_to "Run Query", query_path(query, variable_params), class: "btn btn-info" %>
+      </center>
+    <%end%>
+    <br>
+    <hr>
   </div>
   <script>
     <%= blazer_js_var "data", {statement: query.statement, query_id: query.id, only_chart: true} %>
