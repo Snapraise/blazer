@@ -38,6 +38,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Department</th>
         <th style="width: 20%; text-align: right;">Author</th>
       </tr>
     </thead>
@@ -45,8 +46,8 @@
       <tr v-for="query in visibleItems">
         <td>
           <a :href="itemPath(query)" :class="{ dashboard: query.dashboard }">{{ query.name }}</a>
-          <span class="vars">{{ query.vars }}</span>
         </td>
+        <td>{{ query.blazer_group }}</td>
         <td class="creator">{{ query.creator }}</td>
       </tr>
     </tbody>
@@ -61,7 +62,7 @@
   <%= blazer_js_var "more", @more %>
 
   var prepareSearch = function (list) {
-    var i, q, searchStr
+    var i, q, searchStr, blazer_group_id
     for (i = 0; i < list.length; i++) {
       q = list[i]
       searchStr = q.name + q.creator
