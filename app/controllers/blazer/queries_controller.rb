@@ -14,6 +14,13 @@ module Blazer
       else
         @dashboards = Blazer::Dashboard.order(:name)
         @dashboards = @dashboards.includes(:creator) if Blazer.user_class
+
+        # Filters dashboards to only display those the user has access to
+        @dashboards =
+        @dashboards.select do |dashboard|
+          blazer_group = BlazerGroup.find(dashboard.blazer_group_id).try(:name).try(:to_sym)
+          current_user.can?(:access, blazer_group)
+        end
       end
 
       @dashboards =

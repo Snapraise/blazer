@@ -26,6 +26,8 @@
 <% end %>
 
 <% @queries.each_with_index do |query, i| %>
+  <% blazer_group = BlazerGroup.find(query.blazer_group_id).try(:name).try(:to_sym) %>
+  <% next unless current_user.can?(:access, blazer_group) %>
   <div class="chart-container">
     <h3><%= link_to query.friendly_name, query_path(query, variable_params), target: "_blank" %></h3>
     <center>
