@@ -1,6 +1,7 @@
 <% blazer_title "Checks" %>
-
-<p style="float: right;"><%= link_to "New Check", new_check_path, class: "btn btn-info" %></p>
+<% if current_user.can?(:access, :all_stats) %>
+  <p style="float: right;"><%= link_to "New Check", new_check_path, class: "btn btn-info" %></p>
+<% end %>
 <%= render partial: "blazer/nav" %>
 
 <table class="table">
