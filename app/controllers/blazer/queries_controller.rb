@@ -30,7 +30,7 @@ module Blazer
             name: d.name,
             creator: blazer_user && d.try(:creator) == blazer_user ? "You" : d.try(:creator).try(Blazer.user_name),
             to_param: d.to_param,
-            blazer_group: (BlazerGroup.find(d.blazer_group_id).name).partition('_').last.titleize,
+            blazer_group: BlazerGroup.find(d.blazer_group_id).name.partition('_').last.titleize,
             dashboard: true
           }
         end
@@ -288,6 +288,7 @@ module Blazer
               name: q.name,
               creator: blazer_user && q.try(:creator) == blazer_user ? "You" : q.try(:creator).try(Blazer.user_name),
               vars: q.variables.join(", "),
+              blazer_group: BlazerGroup.find(q.blazer_group_id).name.partition('_').last.titleize,
               to_param: q.to_param
             }
           end
