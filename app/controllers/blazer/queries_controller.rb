@@ -3,10 +3,10 @@ module Blazer
     before_action :set_query, only: [:show, :edit, :update, :destroy, :refresh]
 
     def home
-      if params[:filter] == "dashboards"
-        @queries = []
-      else
+      if current_user.can?(:access, :all_queries) && params[:filter] != "dashboards"
         set_queries(1000)
+      else
+        @queries = []
       end
 
       if params[:filter] && params[:filter] != "dashboards"
@@ -14,6 +14,13 @@ module Blazer
       else
         @dashboards = Blazer::Dashboard.order(:name)
         @dashboards = @dashboards.includes(:creator) if Blazer.user_class
+
+        # Filters dashboards to only display those the user has access to
+        @dashboards =
+        @dashboards.select do |dashboard|
+          blazer_group = BlazerGroup.find(dashboard.blazer_group_id).try(:name).try(:to_sym)
+          current_user.can?(:access, blazer_group)
+        end
       end
 
       @dashboards =

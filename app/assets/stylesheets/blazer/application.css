@@ -185,11 +185,11 @@ input.search:focus {
   clear: both;
 }
 
-.chart-container h4 {
+.chart-container h3 {
   text-align: center;
 }
 
-.chart-container h4 a {
+.chart-container h3 a {
   color: inherit;
 }
 
