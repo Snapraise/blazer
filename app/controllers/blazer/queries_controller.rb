@@ -3,7 +3,7 @@ module Blazer
     before_action :set_query, only: [:show, :edit, :update, :destroy, :refresh]
 
     def home
-      if current_user.can?(:access, :all_stats) && params[:filter] != "dashboards"
+      if current_user.can?(:access, :blazer_engineering) && params[:filter] != "dashboards"
         set_queries(1000)
       else
         @queries = []
