@@ -3,10 +3,10 @@ module Blazer
     before_action :set_query, only: [:show, :edit, :update, :destroy, :refresh]
 
     def home
-      if params[:filter] == "dashboards"
-        @queries = []
-      else
+      if current_user.can?(:access, :blazer_engineering) && params[:filter] != "dashboards"
         set_queries(1000)
+      else
+        @queries = []
       end
 
       if params[:filter] && params[:filter] != "dashboards"
@@ -14,6 +14,13 @@ module Blazer
       else
         @dashboards = Blazer::Dashboard.order(:name)
         @dashboards = @dashboards.includes(:creator) if Blazer.user_class
+
+        # Filters dashboards to only display those the user has access to
+        @dashboards =
+        @dashboards.select do |dashboard|
+          blazer_group = BlazerGroup.find(dashboard.blazer_group_id).try(:name).try(:to_sym)
+          current_user.can?(:access, blazer_group)
+        end
       end
 
       @dashboards =
@@ -23,6 +30,7 @@ module Blazer
             name: d.name,
             creator: blazer_user && d.try(:creator) == blazer_user ? "You" : d.try(:creator).try(Blazer.user_name),
             to_param: d.to_param,
+            blazer_group: BlazerGroup.find(d.blazer_group_id).name.partition('_').last.titleize,
             dashboard: true
           }
         end
@@ -280,6 +288,7 @@ module Blazer
               name: q.name,
               creator: blazer_user && q.try(:creator) == blazer_user ? "You" : q.try(:creator).try(Blazer.user_name),
               vars: q.variables.join(", "),
+              blazer_group: BlazerGroup.find(q.blazer_group_id).name.partition('_').last.titleize,
               to_param: q.to_param
             }
           end
@@ -297,7 +306,7 @@ module Blazer
       end
 
       def query_params
-        params.require(:query).permit(:name, :description, :statement, :data_source)
+        params.require(:query).permit(:name, :description, :blazer_group_id, :statement, :data_source)
       end
 
       def blazer_params

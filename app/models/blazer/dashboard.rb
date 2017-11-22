@@ -5,6 +5,7 @@ module Blazer
     has_many :queries, through: :dashboard_queries
 
     validates :name, presence: true
+    validates :blazer_group_id, presence: true
 
     def to_param
       [id, name.gsub("'", "").parameterize].join("-")

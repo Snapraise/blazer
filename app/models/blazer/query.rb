@@ -6,6 +6,8 @@ module Blazer
     has_many :dashboards, through: :dashboard_queries
     has_many :audits
 
+    validates :name, presence: true
+    validates :blazer_group_id, presence: true
     validates :statement, presence: true
 
     scope :named, -> { where("blazer_queries.name <> ''") }

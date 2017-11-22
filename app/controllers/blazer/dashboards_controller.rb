@@ -72,7 +72,7 @@ module Blazer
     private
 
       def dashboard_params
-        params.require(:dashboard).permit(:name)
+        params.require(:dashboard).permit(:name, :blazer_group_id)
       end
 
       def set_dashboard
