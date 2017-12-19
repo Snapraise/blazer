@@ -39,12 +39,9 @@
     </center>
     <% if query.variables.empty? %>
       <br>
-      <div align="right">
+      <div align="center">
+        <%= link_to "Run Query", query_path(query, variable_params), class: "btn btn-info" %>
         <%= button_to "Download", run_queries_path(query_id: query.id, format: "csv"), params: {statement: query.statement}, class: "btn btn-primary" %>
-      </div>
-      <br>
-      <div id="chart-<%= i %>" class="chart">
-        <p class="text-muted">Loading...</p>
       </div>
     <% else %>
       <center>
@@ -54,14 +51,4 @@
     <br>
     <hr>
   </div>
-  <script>
-    <%= blazer_js_var "data", {statement: query.statement, query_id: query.id, only_chart: true} %>
-
-    runQuery(data, function (data) {
-      $("#chart-<%= i %>").html(data)
-      $("#chart-<%= i %> table").stupidtable()
-    }, function (message) {
-      $("#chart-<%= i %>").addClass("query-error").html(message)
-    });
-  </script>
 <% end %>
